@@ -279,7 +279,48 @@ tError congress_getOrganizationPresentations(tCongress* object, const char* orga
 
 int congress_getOrganizationTop(tCongress* object, const char* organization_name){
     // PR3 EX1
-	return ERR_NOT_IMPLEMENTED;
+	//precondition ckecking
+	assert(object != NULL);
+	assert(organization_name != NULL);
+	
+	//declaration of variables
+	tOrganization *org;
+	tPresentationQueue auxPresentations;
+	tPresentationQueue orgPresentations;
+	tPresentation *pres;
+	int scoreTag, nMaxScores;
+	
+	//finding the organization in the congress
+	org = congress_findOrganization(object, organization_name);
+	if (org == NULL) {
+		//unexisting organization
+		return ERR_INVALID_ORGANIZATION;
+	}
+	//initializing a presentation queue by organization
+	presentationQueue_createQueue(&orgPresentations);
+	presentationQueue_duplicate(&auxPresentations,object->presentations);
+	presentationQueue_getOrganizationPresentationsRecursive(&auxPresentations,org,&orgPresentations);
+	
+	if (presentationQueue_empty(orgPresentations)){
+		//the organization exists but has no presentations
+		return 0;
+	}
+	
+	//checking if any of the presentations in this  presentation queue by organization,  has the max score
+	//get the first presentation and set the counter of mas scores to 0
+	pres = presentationQueue_head(orgPresentations);
+	nMaxScores = 0;
+	while (!presentationQueue_empty(orgPresentations)) {
+		scoreTag = congress_getOrganizationWins(object,organization_name,pres->presentationTopic);
+		if (scoreTag == 3 || scoreTag == 1){
+			//scoreTag 3 or 1 means that has the maxScore or a first place draw in a presentation about one topic
+			nMaxScores++;
+		}
+		//set the next presentation by organization to check
+		presentationQueue_dequeue(&orgPresentations);
+		pres = presentationQueue_head(orgPresentations);
+	}
+	return nMaxScores;
 }
 
 // Gets the average point of the organization
