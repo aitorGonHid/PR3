@@ -372,5 +372,30 @@ tError presentationQueue_getOrganizationPresentationsRecursive(tPresentationQueu
 // Get the number of presentations made by an organization
 int presentationQueue_getNumberTopicsIterative (tPresentationQueue *queue, tOrganization *organization){
     // PR3 EX1
-    return ERR_NOT_IMPLEMENTED;
+	
+	//check preconditions
+	assert(queue != NULL);
+	assert(organization != NULL);
+	
+	//variable declaration
+    int nPresentations;
+	tPresentationQueue auxQueue;
+	tPresentationQueue presentations;
+	
+	//getting a copy of the source queue to avoid modifications
+	presentationQueue_duplicate(&auxQueue, *queue);
+	
+	//getting a queue of presentations by organization
+	//if the organization doesn't exist or has 0 presentations, presentations queue will be empty
+	presentationQueue_createQueue(&presentations);
+	presentationQueue_getOrganizationPresentationsRecursive(&auxQueue,organization,&presentations);
+	
+	//check the number of presentations 
+	nPresentations = 0;
+	while (!presentationQueue_empty(presentations)){
+		nPresentations++;
+		presentationQueue_dequeue(&presentations);
+	}
+	
+	return nPresentations;
 }
