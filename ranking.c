@@ -44,10 +44,35 @@ tError ranking_getOrganizationStatistics(tCongress* object, const char* organiza
 // Compare stadistics of two Organizations to get the order in the ranking.
 // 0 equal ranking, 1 stadistics1 wins, -1 stadistics2 wins
 int ranking_compareStadistics(tOrganizationStadistics* stadistics1, 
-							  tOrganizationStadistics* stadistics2)
-{
+							  tOrganizationStadistics* stadistics2) {
     // PR3 EX1
-    return ERR_NOT_IMPLEMENTED;
+    ///===================check conditions to win==========================================
+	//==========FIRST condition: the one with higher average points wins ==================
+	if (stadistics1->averagePoints > stadistics2->averagePoints) {
+		return 1;
+	} else if (stadistics1->averagePoints < stadistics2->averagePoints) {
+		return -1;
+	} else {
+	//=========================first condition RAW=========================================
+	//==========SECOND condition: the one that has more presentatios wins =================
+		if (stadistics1->numPresentations > stadistics2->numPresentations) {
+			return 1;
+		} else if (stadistics1->numPresentations < stadistics2->numPresentations) {
+			return -1;
+		} else {
+	//=========================second condition RAW========================================
+	//==========THIRD condition: the one that has more presentatios with max score wins ===
+			if (stadistics1->numTopPresentations > stadistics2->numTopPresentations) {
+				return 1;
+			} else if (stadistics1->numTopPresentations < stadistics2->numTopPresentations) {
+				return -1;
+			} else {
+	//=========================third condition RAW=========================================
+	//================ ORGANIZATIONS HAVE THE SAME STADISTICS==============================
+				return 0;
+			}
+		}
+	}
 }
 
 // Gets the stadistics of a Organization and create the ranking
