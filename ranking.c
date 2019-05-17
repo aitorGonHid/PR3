@@ -8,7 +8,37 @@
 // Get stadistics for a Organization
 tError ranking_getOrganizationStatistics(tCongress* object, const char* organization_name, tOrganizationStadistics *stadistics){
     // PR3 EX1
-    return ERR_NOT_IMPLEMENTED;
+    //precondition checking
+	assert (object != NULL);
+	assert (organization_name != NULL);
+	assert (stadistics != NULL);
+	
+	//variable declaration
+	tPresentationQueue queue;
+	
+	//find organizatin and save it
+	stadistics->organization = congress_findOrganization(object, organization_name);
+	//finish function if organization not exists
+	if (stadistics->organization == NULL) {
+		return ERR_NOT_EXISTS;
+	}
+	
+	//saving average points
+	stadistics->averagePoints = congress_getOrganizationPoints(object, organization_name);
+	
+	//saving number of presentations by organization
+	//use an auxuliar queue is needed to get number or presentations by organization, using congress_getOrganizationPresentations function
+	presentationQueue_createQueue(&queue);
+	congress_getOrganizationPresentations(object, organization_name, &queue);
+	stadistics->numPresentations = presentationQueue_getNumberTopicsIterative(&queue, stadistics->organization);
+	
+	//saving number of presentations with max score
+	stadistics->numTopPresentations = congress_getOrganizationTop(object, organization_name);
+	
+	//delete the auxiliar queue
+	presentationQueue_free(&queue);
+	
+	return OK;
 }
 
 // Compare stadistics of two Organizations to get the order in the ranking.
