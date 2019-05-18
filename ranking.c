@@ -112,7 +112,11 @@ tError ranking_createOrganizationRanking(tCongress* congress,
 // Create the ranking list
 void rankingList_createList(tRankingList* list){
     // PR3 EX2
-    return;
+	//set first & last pointers direction to NULL
+	list->first = NULL;
+	list->last = NULL;
+	//set starting size of the list to 0
+	list->size = 0;
 }
 
 // Gets ranking node from given position
