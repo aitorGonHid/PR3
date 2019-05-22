@@ -204,7 +204,42 @@ tError rankingList_insert(tRankingList* list, tRanking ranking, int index){
 // Deletes a ranking from the ranking list
 tError rankingList_delete(tRankingList* list, int index){
     // PR3 EX2
-    return ERR_NOT_IMPLEMENTED;
+    //pre condition check
+	assert(list != NULL);
+	
+	//verify list size
+	if (list->size == 0) {
+		return ERR_EMPTY_LIST;
+	}
+	
+	//verify index
+	if (index < 1 || index > list->size) {
+		return ERR_INVALID_INDEX;
+	}
+	
+	tRankingListNode *tmp;
+	int i = index;
+	
+	//index point to the first element
+	if (index == 1) {
+		tmp = list->first;
+		list->first = tmp->next;
+		free(tmp);
+		list->size = list->size-1;
+	} else {
+	//index points to one of the following elements
+		tmp = list->first;
+		//get position to set tmp direction to point to
+		while (i < list->size) {
+			tmp = tmp->next;
+			i++;			
+		}
+		tmp->prev->next = tmp->next;
+		tmp->next->prev = tmp->prev;
+		free(tmp);
+		list->size = list->size-1;
+	}
+	return OK;
 }
 
 // Gets ranking from given position
