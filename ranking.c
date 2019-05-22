@@ -218,7 +218,7 @@ tError rankingList_delete(tRankingList* list, int index){
 	}
 	
 	tRankingListNode *tmp;
-	int i = index;
+	int i = 1;
 	
 	//index point to the first element
 	if (index == 1) {
@@ -227,10 +227,11 @@ tError rankingList_delete(tRankingList* list, int index){
 		free(tmp);
 		list->size = list->size-1;
 	} else {
-	//index points to one of the following elements
-		tmp = list->first;
+	//index points to 2nd or one of the following elemnts
+		
 		//get position to set tmp direction to point to
-		while (i < list->size) {
+		tmp = list->first;
+		while (i < index) {
 			tmp = tmp->next;
 			i++;			
 		}
@@ -245,7 +246,37 @@ tError rankingList_delete(tRankingList* list, int index){
 // Gets ranking from given position
 tRanking* rankingList_get(tRankingList* list, int index){
     // PR3 EX2
-    return NULL;
+    //pre condition check
+	assert (list != NULL);
+	assert (index > 0);
+	
+	//check invalid index
+	if (index > list->size) {
+		return NULL;
+	}
+	
+	tRankingListNode *tmp;
+	int i = 1;
+	tRanking *elem;
+	
+	//index points to list first element
+	if (index == 1) {
+		elem = &list->first->e;
+		
+		return elem;
+	} else {
+	//index points to 2nd or other of the following elements
+		
+		//get position to set tmp direction to point to
+		tmp = list->first;
+		while (i < index) {
+			tmp = tmp->next;
+			i++;
+		}
+		elem = &tmp->e;
+		
+		return elem;
+	}
 }
 
 // Gets true if list is empty
