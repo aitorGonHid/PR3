@@ -248,7 +248,7 @@ tRanking* rankingList_get(tRankingList* list, int index){
     // PR3 EX2
     //pre condition check
 	assert (list != NULL);
-	assert (index > 0);
+	assert (index > 0);//assert needed this time. This function cant return ERR_INVALID_INDEX.
 	
 	//check invalid index
 	if (index > list->size) {
@@ -282,13 +282,26 @@ tRanking* rankingList_get(tRankingList* list, int index){
 // Gets true if list is empty
 bool rankingList_empty(tRankingList* list){
     // PR3 EX2
-    return false;
+    //pre condition check
+	assert(list != NULL);
+	
+	if (list->size != 0) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 // Remove all data for a ranking list
 void rankingList_free(tRankingList* list){
     // PR3 EX2
-    return;
+	//pre condition check
+	assert (list != NULL);
+	
+	//while the list has some elements, delete first element
+	while (!rankingList_empty(list)) {
+		rankingList_delete(list, 1);
+	}		
 }
 
 // Get organization with better stadistics
