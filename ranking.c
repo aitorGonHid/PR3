@@ -307,7 +307,37 @@ void rankingList_free(tRankingList* list){
 // Get organization with better stadistics
 tOrganization* rankingList_getBestOrganization(tRankingList* list){
     // PR3 EX3
-    return NULL;
+	// pre condition check
+	
+	assert (list != NULL);
+	
+	tRankingListNode *best;
+	tRankingListNode *cmp;
+	int i = 1;
+	int result;
+	
+	//check list size
+	if (list->size == 0) {
+		return NULL;
+	}
+	
+	//get first & second element to start comparisons
+	best = list->first;
+	cmp = best->next;
+	
+	while (i < list->size) {
+		
+		//get the one with better stadistics
+		result = ranking_compareStadistics(best->e.stadistics,cmp->e.stadistics);
+		if (result == -1) {
+			best = cmp;
+		}
+		//get the following element
+		cmp = cmp->next;
+		i++;
+	}
+	
+    return best->e.org;
 }
 
 // Get organization with worst stadistics
