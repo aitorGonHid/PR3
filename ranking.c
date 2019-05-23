@@ -310,12 +310,6 @@ tOrganization* rankingList_getBestOrganization(tRankingList* list){
     return NULL;
 }
 
-// Get organization with worst stadistics
-tOrganization* rankingList_getWorstOrganization(tRankingList* list){
-    // PR3 EX3
-    return NULL;
-}
-
 tError rankingList_insert_sorted(tRankingList* list, tRanking ranking)
 {
     // Check preconditions
