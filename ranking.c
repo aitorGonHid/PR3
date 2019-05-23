@@ -340,6 +340,41 @@ tOrganization* rankingList_getBestOrganization(tRankingList* list){
     return best->e.org;
 }
 
+// Get organization with worst stadistics
+tOrganization* rankingList_getWorstOrganization(tRankingList* list){
+    // PR3 EX3
+	//pre condition check
+	assert (list != NULL);
+	
+	tRankingListNode *worst;
+	tRankingListNode *cmp;
+	int i = list->size;
+	int result;
+	
+	//check list size
+	if (list->size == 0) {
+		return NULL;
+	}
+	
+	//get first & second element to start comparisons
+	worst = list->last;
+	cmp = worst->prev;
+	
+	while (i > 1) {
+		
+		//get the one with better stadistics
+		result = ranking_compareStadistics(worst->e.stadistics,cmp->e.stadistics);
+		if (result == 1) {
+			worst = cmp;
+		}
+		//get the following element
+		cmp = cmp->prev;
+		i--;
+	}
+	
+    return worst->e.org;
+}
+
 tError rankingList_insert_sorted(tRankingList* list, tRanking ranking)
 {
     // Check preconditions
