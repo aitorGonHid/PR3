@@ -8,7 +8,7 @@
 // Get stadistics for a Organization
 tError ranking_getOrganizationStatistics(tCongress* object, const char* organization_name, tOrganizationStadistics *stadistics){
     // PR3 EX1
-    //precondition checking
+    // Check preconditions
 	assert (object != NULL);
 	assert (organization_name != NULL);
 	assert (stadistics != NULL);
@@ -16,9 +16,9 @@ tError ranking_getOrganizationStatistics(tCongress* object, const char* organiza
 	//variable declaration
 	tPresentationQueue queue;
 	
-	//find organizatin and save it
+	// find organizatin and save it
 	stadistics->organization = congress_findOrganization(object, organization_name);
-	//finish function if organization not exists
+	// finish function if organization not exists
 	if (stadistics->organization == NULL) {
 		return ERR_NOT_EXISTS;
 	}
@@ -26,16 +26,16 @@ tError ranking_getOrganizationStatistics(tCongress* object, const char* organiza
 	//saving average points
 	stadistics->averagePoints = congress_getOrganizationPoints(object, organization_name);
 	
-	//saving number of presentations by organization
-	//use an auxuliar queue is needed to get number or presentations by organization, using congress_getOrganizationPresentations function
+	// saving number of presentations by organization
+	// use an auxuliar queue is needed to get number or presentations by organization, using congress_getOrganizationPresentations function
 	presentationQueue_createQueue(&queue);
 	congress_getOrganizationPresentations(object, organization_name, &queue);
 	stadistics->numPresentations = presentationQueue_getNumberTopicsIterative(&queue, stadistics->organization);
 	
-	//saving number of presentations with max score
+	// saving number of presentations with max score
 	stadistics->numTopPresentations = congress_getOrganizationTop(object, organization_name);
 	
-	//delete the auxiliar queue
+	// delete the auxiliar queue
 	presentationQueue_free(&queue);
 	
 	return OK;
@@ -46,7 +46,7 @@ tError ranking_getOrganizationStatistics(tCongress* object, const char* organiza
 int ranking_compareStadistics(tOrganizationStadistics* stadistics1, 
 							  tOrganizationStadistics* stadistics2) {
     // PR3 EX1
-    ///===================check conditions to win==========================================
+    //===================check conditions to win==========================================
 	//==========FIRST condition: the one with higher average points wins ==================
 	if (stadistics1->averagePoints > stadistics2->averagePoints) {
 		return 1;
@@ -112,10 +112,10 @@ tError ranking_createOrganizationRanking(tCongress* congress,
 // Create the ranking list
 void rankingList_createList(tRankingList* list){
     // PR3 EX2
-	//set first & last pointers direction to NULL
+	// set first & last pointers direction to NULL
 	list->first = NULL;
 	list->last = NULL;
-	//set starting size of the list to 0
+	// set starting size of the list to 0
 	list->size = 0;
 }
 
@@ -128,15 +128,15 @@ tRankingListNode* rankingList_getNode(tRankingList* list, int index){
 // Insert/adds a new ranking to the ranking list
 tError rankingList_insert(tRankingList* list, tRanking ranking, int index){
 	// PR3 EX2
-    //preconditions check
+    // Check preconditions
 	assert (list != NULL);
 	
-	//variable declaration
+	// variable declaration
 	tRankingListNode *tmp;
 	tRankingListNode *aux;
 	int i, size;
 	
-	//verify index
+	// verify index
 	size = list->size;
 	if (index < 1 || index > size+1) {
 		return ERR_INVALID_INDEX;
@@ -144,12 +144,12 @@ tError rankingList_insert(tRankingList* list, tRanking ranking, int index){
 
 	tmp = (tRankingListNode*) malloc (sizeof(tRankingListNode));
 	
-	//verify memory allocation	
+	// verify memory allocation	
 	if (tmp == NULL){
 		return ERR_MEMORY_ERROR;
 	}
 	
-	//insert element in index position
+	// insert element in index position
 	if (list->size == 0) {
 		//empty list
 		if (index == 1) {
@@ -163,9 +163,9 @@ tError rankingList_insert(tRankingList* list, tRanking ranking, int index){
 			return ERR_INVALID_INDEX;
 		}
 	} else {
-		//list with some elements
+		// list with some elements
 		if (index == 1){
-			//insert at first position
+			// insert at first position
 			tmp->next = list->first;
 			tmp->prev = NULL;
 			tmp->e = ranking;
@@ -173,7 +173,7 @@ tError rankingList_insert(tRankingList* list, tRanking ranking, int index){
 			list->first = tmp;
 			list->size = list->size + 1;
 		} else if (index == list->size+1){
-			//insert at last position
+			// insert at last position
 			tmp->next = NULL;
 			tmp->prev = list->last;
 			tmp->e = ranking;
@@ -181,15 +181,15 @@ tError rankingList_insert(tRankingList* list, tRanking ranking, int index){
 			list->last = tmp;
 			list->size = list->size+1;
 		} else {
-			//insert between 1st and last pos
+			// insert between 1st and last pos
 			i = 1;
 			aux = list->first;
-			//get position where new element must be in
+			// get position where new element must be in
 			while (i < index) {
 				aux = aux->next;
 				i++;
 			}
-			//insert element and actualize the previous and next element pointers
+			// insert element and actualize the previous and next element pointers
 			tmp->next = aux;
 			tmp->prev = aux->prev;
 			tmp->e = ranking;
@@ -204,15 +204,15 @@ tError rankingList_insert(tRankingList* list, tRanking ranking, int index){
 // Deletes a ranking from the ranking list
 tError rankingList_delete(tRankingList* list, int index){
     // PR3 EX2
-    //pre condition check
+    // pre condition check
 	assert(list != NULL);
 	
-	//verify list size
+	// verify list size
 	if (list->size == 0) {
 		return ERR_EMPTY_LIST;
 	}
 	
-	//verify index
+	// verify index
 	if (index < 1 || index > list->size) {
 		return ERR_INVALID_INDEX;
 	}
@@ -220,16 +220,16 @@ tError rankingList_delete(tRankingList* list, int index){
 	tRankingListNode *tmp;
 	int i = 1;
 	
-	//index point to the first element
+	// index point to the first element
 	if (index == 1) {
 		tmp = list->first;
 		list->first = tmp->next;
 		free(tmp);
 		list->size = list->size-1;
 	} else {
-	//index points to 2nd or one of the following elemnts
+	// index points to 2nd or one of the following elemnts
 		
-		//get position to set tmp direction to point to
+		// get position to set tmp direction to point to
 		tmp = list->first;
 		while (i < index) {
 			tmp = tmp->next;
@@ -246,11 +246,11 @@ tError rankingList_delete(tRankingList* list, int index){
 // Gets ranking from given position
 tRanking* rankingList_get(tRankingList* list, int index){
     // PR3 EX2
-    //pre condition check
+    // Check preconditions
 	assert (list != NULL);
 	assert (index > 0);//assert needed this time. This function cant return ERR_INVALID_INDEX.
 	
-	//check invalid index
+	// check invalid index
 	if (index > list->size) {
 		return NULL;
 	}
@@ -259,13 +259,13 @@ tRanking* rankingList_get(tRankingList* list, int index){
 	int i = 1;
 	tRanking *elem;
 	
-	//index points to list first element
+	// index points to list first element
 	if (index == 1) {
 		elem = &list->first->e;
 		
 		return elem;
 	} else {
-	//index points to 2nd or other of the following elements
+	// index points to 2nd or other of the following elements
 		
 		//get position to set tmp direction to point to
 		tmp = list->first;
@@ -282,7 +282,7 @@ tRanking* rankingList_get(tRankingList* list, int index){
 // Gets true if list is empty
 bool rankingList_empty(tRankingList* list){
     // PR3 EX2
-    //pre condition check
+    // pre condition check
 	assert(list != NULL);
 	
 	if (list->size != 0) {
@@ -295,10 +295,10 @@ bool rankingList_empty(tRankingList* list){
 // Remove all data for a ranking list
 void rankingList_free(tRankingList* list){
     // PR3 EX2
-	//pre condition check
+	// pre condition check
 	assert (list != NULL);
 	
-	//while the list has some elements, delete first element
+	// while the list has some elements, delete first element
 	while (!rankingList_empty(list)) {
 		rankingList_delete(list, 1);
 	}		
@@ -316,23 +316,23 @@ tOrganization* rankingList_getBestOrganization(tRankingList* list){
 	int i = 1;
 	int result;
 	
-	//check list size
+	// check list size
 	if (list->size == 0) {
 		return NULL;
 	}
 	
-	//get first & second element to start comparisons
+	// get first & second element to start comparisons
 	best = list->first;
 	cmp = best->next;
 	
 	while (i < list->size) {
 		
-		//get the one with better stadistics
+		// get the one with better stadistics
 		result = ranking_compareStadistics(best->e.stadistics,cmp->e.stadistics);
 		if (result == -1) {
 			best = cmp;
 		}
-		//get the following element
+		// get the following element
 		cmp = cmp->next;
 		i++;
 	}
@@ -343,7 +343,7 @@ tOrganization* rankingList_getBestOrganization(tRankingList* list){
 // Get organization with worst stadistics
 tOrganization* rankingList_getWorstOrganization(tRankingList* list){
     // PR3 EX3
-	//pre condition check
+	// Check preconditions
 	assert (list != NULL);
 	
 	tRankingListNode *worst;
@@ -351,23 +351,23 @@ tOrganization* rankingList_getWorstOrganization(tRankingList* list){
 	int i = list->size;
 	int result;
 	
-	//check list size
+	// check list size
 	if (list->size == 0) {
 		return NULL;
 	}
 	
-	//get first & second element to start comparisons
+	// get first & second element to start comparisons
 	worst = list->last;
 	cmp = worst->prev;
 	
 	while (i > 1) {
 		
-		//get the one with better stadistics
+		// get the one with better stadistics
 		result = ranking_compareStadistics(worst->e.stadistics,cmp->e.stadistics);
 		if (result == 1) {
 			worst = cmp;
 		}
-		//get the following element
+		// get the following element
 		cmp = cmp->prev;
 		i--;
 	}

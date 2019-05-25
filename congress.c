@@ -279,18 +279,17 @@ tError congress_getOrganizationPresentations(tCongress* object, const char* orga
 
 int congress_getOrganizationTop(tCongress* object, const char* organization_name){
     // PR3 EX1
-	//precondition ckecking
+	//Check preconditions
 	assert(object != NULL);
 	assert(organization_name != NULL);
 	
-	//declaration of variables
 	tOrganization *org;
 	tPresentationQueue auxPresentations;
 	tPresentationQueue orgPresentations;
 	tPresentation *pres;
 	int scoreTag, nMaxScores;
 	
-	//finding the organization in the congress
+	//find the organization in the congress
 	org = congress_findOrganization(object, organization_name);
 	if (org == NULL) {
 		//unexisting organization
@@ -307,7 +306,7 @@ int congress_getOrganizationTop(tCongress* object, const char* organization_name
 	}
 	
 	//checking if any of the presentations in this  presentation queue by organization,  has the max score
-	//get the first presentation and set the counter of mas scores to 0
+	//get the first presentation and set the counter of max scores to 0
 	pres = presentationQueue_head(orgPresentations);
 	nMaxScores = 0;
 	while (!presentationQueue_empty(orgPresentations)) {
@@ -326,11 +325,10 @@ int congress_getOrganizationTop(tCongress* object, const char* organization_name
 // Gets the average point of the organization
 double congress_getOrganizationPoints(tCongress* object, const char* organization_name){
     // PR3 EX1
-    //precondition checking
+    //Check preconditions
 	assert (object != NULL);
 	assert (organization_name != NULL);
 	
-	//variable declaration
 	int nPresentations;
 	double averageScore, scoreSum;
 	tOrganization *org;
@@ -338,21 +336,22 @@ double congress_getOrganizationPoints(tCongress* object, const char* organizatio
 	tPresentationQueue auxQueue;
 	tPresentationQueue presentations;
 	
-	// 1) find the organization in the source congress
+	// find the organization in the source congress
 	org = congress_findOrganization(object, organization_name);
-	// 2) if organization doesn't return ERR end exit function
+	
+	// if organization doesn't return ERR end exit function
 	if (org == NULL){
 		return ERR_INVALID_ORGANIZATION;
 	}
 	
-	// 3) organization exists. Let's check how many presentations it has
+	// organization exists. Check how many presentations  has
 	// create an auxiliary queue so as not to modify the original queue
 	presentationQueue_duplicate(&auxQueue,object->presentations);
-	// create a presentation queue by organization
+	// create a new presentation queue by organization
 	presentationQueue_createQueue(&presentations);
 	presentationQueue_getOrganizationPresentationsRecursive(&auxQueue, org, &presentations);
 	
-	// 4) get the number of presentations and the summation of its scores to get the average score
+	// get the number of presentations and the summation of its scores to get the average score
 	// set counters at 0
 	scoreSum = 0;
 	nPresentations = 0;
@@ -365,7 +364,7 @@ double congress_getOrganizationPoints(tCongress* object, const char* organizatio
 		presentationQueue_dequeue(&presentations);
 		
 	}
-	// 5) get the average score dividing the summation of scores by the number of presentations, and return it
+	// get the average score dividing the summation of scores by the number of presentations, and return it
 	averageScore = scoreSum / nPresentations;
 	
 	return averageScore;
