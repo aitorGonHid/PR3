@@ -375,14 +375,46 @@ tOrganization* rankingList_getWorstOrganization(tRankingList* list){
     return worst->e.org;
 }
 
-tError rankingList_insert_sorted(tRankingList* list, tRanking ranking)
-{
-    // Check preconditions
-    return ERR_NOT_IMPLEMENTED;
+tError rankingList_insert_sorted(tRankingList* list, tRanking ranking) {
+	// PR3 EX3
+	/*
+	int index = list->size+1;
+	rankingList_insert(list, ranking, index);
+	return OK;*/
+	return ERR_NOT_IMPLEMENTED;
 }
 
 //Sort list according to Organization stadistics
 tRankingList* rankingList_sortInsertion(tRankingList *list){
-    // PR3 EX3
-    return NULL;
+	// PR3 EX3
+	/*
+	//pre condition check
+	assert (list != NULL);
+	
+	int i, j, result;
+	tRankingList *srtdList;
+	tRanking *act;
+	tRanking *comp;
+	
+	//empty list. No sorting needed
+	if (rankingList_empty(list)) {
+		return list;
+	}
+	
+	//list has some elements
+	rankingList_createList(srtdList);
+	for (i=1; i<=list->size; i++) {
+		act = rankingList_get(list, i);
+		for (j=i+1;j<=list->size;j++) {
+			comp = rankingList_get(list,j);
+			result = ranking_compareStadistics(act->stadistics, comp->stadistics);
+			if (result < 1) {
+				act = rankingList_get(list, j);
+			}
+		}
+	//insert one of the best stadistics element
+	rankingList_insert_sorted(srtdList, *act);
+	}
+	return srtdList;*/
+	return NULL;
 }
