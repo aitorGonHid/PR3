@@ -373,44 +373,44 @@ tOrganization* rankingList_getWorstOrganization(tRankingList* list){
 
 tError rankingList_insert_sorted(tRankingList* list, tRanking ranking) {
 	// PR3 EX3
-	/*
-	int index = list->size+1;
-	rankingList_insert(list, ranking, index);
-	return OK;*/
-	return ERR_NOT_IMPLEMENTED;
+	rankingList_insert(list, ranking, list->size+1);
+	return OK;
 }
 
 //Sort list according to Organization stadistics
 tRankingList* rankingList_sortInsertion(tRankingList *list){
 	// PR3 EX3
-	/*
-	//pre condition check
 	assert (list != NULL);
 	
 	int i, j, result;
-	tRankingList *srtdList;
-	tRanking *act;
-	tRanking *comp;
+	tRanking *current;
+	tRanking *compare;
+	tRankingList *sortedList;
 	
-	//empty list. No sorting needed
-	if (rankingList_empty(list)) {
+	// init sorted list
+	sortedList  = (tRankingList*) malloc (sizeof(tRankingList));
+
+	rankingList_createList(sortedList);
+	
+	// empty list or just 1 element. Nothing to sort
+	if (rankingList_empty(list) || list->size == 1) {
 		return list;
 	}
-	
-	//list has some elements
-	rankingList_createList(srtdList);
-	for (i=1; i<=list->size; i++) {
-		act = rankingList_get(list, i);
-		for (j=i+1;j<=list->size;j++) {
-			comp = rankingList_get(list,j);
-			result = ranking_compareStadistics(act->stadistics, comp->stadistics);
-			if (result < 1) {
-				act = rankingList_get(list, j);
+	// not empty list
+	for (i=1 ; i <= list->size ; i++) {
+		current = rankingList_get(list, i);
+		for (j=i+1 ; j <= list->size+1 ; j++) {
+			compare = rankingList_get(list, j);
+			if (compare != NULL) {
+				result = ranking_compareStadistics(current->stadistics, compare->stadistics);
+				if (result == -1) {
+					current = rankingList_get(list, j);
+				}
+			} else {
+				rankingList_insert_sorted(sortedList, *current);
 			}
 		}
-	//insert one of the best stadistics element
-	rankingList_insert_sorted(srtdList, *act);
 	}
-	return srtdList;*/
-	return NULL;
+
+	return sortedList;
 }
