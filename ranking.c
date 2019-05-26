@@ -152,16 +152,12 @@ tError rankingList_insert(tRankingList* list, tRanking ranking, int index){
 	// insert element in index position
 	if (list->size == 0) {
 		//empty list
-		if (index == 1) {
-			tmp->next = NULL;
-			tmp->prev = NULL;
-			tmp->e = ranking;
-			list->first = tmp;
-			list->last = tmp;
-			list->size = list->size + 1;
-		} else {
-			return ERR_INVALID_INDEX;
-		}
+		tmp->next = NULL;
+		tmp->prev = NULL;
+		tmp->e = ranking;
+		list->first = tmp;
+		list->last = tmp;
+		list->size = list->size + 1;
 	} else {
 		// list with some elements
 		if (index == 1){
